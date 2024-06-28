@@ -27,7 +27,7 @@
 
  <script>
 export default {
-  name: "products",
+  name: "ProductList",
   data() {
     return {
       showProduct: true,

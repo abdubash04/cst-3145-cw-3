@@ -6,21 +6,21 @@
     </header>
     <main>
       <ProductList @addProducts="addToCart" :serverUrl="serverUrl" v-if="activeComponent === 'ProductList'" />
-      <CheckoutPage :cart="cart" v-if="activeComponent === 'CheckoutPage'" @remove-from-cart="removeFromCart" @clear-cart="clearCart"/>
+      <CheckoutComponent :cart="cart" v-if="activeComponent === 'CheckoutPage'" @remove-from-cart="removeFromCart" @clear-cart="clearCart"/>
       <button v-on:click="changeComponent" class="btn btn-primary m-3">Proceed to Checkout ({{ cartItemCount }})</button>
     </main>
   </div>
 </template>
 
 <script>
-import CheckoutPage from "./components/CheckoutPage.vue";
+import CheckoutComponent from "./components/CheckoutComponent.vue";
 import ProductList from "./components/ProductList.vue";
 
 export default {
   name: "App",
   components: {
     ProductList,
-    CheckoutPage,
+    CheckoutComponent,
   },
   data() {
     return {
@@ -36,7 +36,7 @@ export default {
   },
   methods: {
     changeComponent() {
-      this.activeComponent = this.activeComponent === 'ProductList' ? 'CheckoutPage' : 'ProductList';
+      this.activeComponent = this.activeComponent === 'ProductList' ? 'CheckoutComponent' : 'ProductList';
     },
     addToCart(lesson) {
       if (lesson.spaces > 0) {
@@ -61,7 +61,7 @@ export default {
       localStorage.setItem('cart', JSON.stringify(this.cart));
     },
     async getLessons() {
-      const url = new URL(this.$root.serverUrl + "/collection/products");
+      const url = new URL(this.$root.serverUrl + "/collection/ProductList");
       const response = await fetch(url);
       if (response.ok) {
         const lessons = await response.json();
