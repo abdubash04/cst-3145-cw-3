@@ -1,4 +1,3 @@
-
 <template>
   <div class="container mt-4">
     <h1>Checkout Page</h1>
@@ -29,7 +28,7 @@ export default {
   name: "CheckoutPage",
   props: {
     cart: {
-      type: Object,
+      type: Array,
       required: true
     }
   },
@@ -42,7 +41,7 @@ export default {
   },
   computed: {
     cartItems() {
-      return Object.values(this.cart);
+      return this.cart;
     },
     validForm() {
       return this.name.trim() !== "" && this.phone.match(/^\d+$/);

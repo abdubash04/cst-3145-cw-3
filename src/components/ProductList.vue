@@ -21,6 +21,32 @@
                         </div>
                     </div>
                 </div>
+            
+          
+
+            <div class="container mt-4" ></div><br>
+                <div class="row g-3">
+                    <div class="col-sm-8 border rounded-3">
+                        <div v-for="item in cart" class="border-bottom" :key="item.lesson.id">
+                            <div class="col-sm-12 mb-4 p-3">
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <i :class="item.lesson.icon" class="display-1 ms-auto"></i>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <p>Title: {{item.lesson.title}}</p>
+                                        <p>quantity: {{item.amount}}</p>
+                                        <button class="btn btn-danger rounded" v-on:click='removeProduct(item.lesson)'>Remove</button>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <p>price: {{item.lesson.price}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>  
+            
 </template>
 
 
@@ -32,7 +58,7 @@ export default {
     return {
       showProduct: true,
       lessons: [],
-      cart: JSON.parse(localStorage.getItem("cart")) || {},
+      cart: JSON.parse(localStorage.getItem("cart")) || [],
       searchTerm: "",
       username: "",
       phonenumber: "",
