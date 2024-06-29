@@ -1,52 +1,65 @@
 <template>
-     <div class="row">
-                    <div class="col-sm-6" v-for="product in sortedLessons" :key="product.id">
-                        <div class="card mb-3 mt-3 rounded border border-success-subtle">
-                            <div class="card-header d-flex">
-                                <div>
-                                    <h5>title: {{product.title}}</h5>
-                                </div>
-                                <i :class="product.icon" class="fs-1 ms-auto"></i>
-                            </div>
-                            <div class="card-body">
-                                <p>price: {{product.price}} AED</p>
-                                <p>Spaces: {{product.spaces}}</p>
-                                <p>location: {{product.location}}</p>
-                            </div>
-                            <div class="card-footer">
-                                <button class="btn btn-info rounded" v-on:click='addToCart(product)'
-                                    :disabled="product.spaces === 0">Add to cart</button>
-                                <button class="btn btn-danger rounded" v-on:click='removeProduct(product)'>Remove</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            
-          
+  <div class="row">
+    <div class="col-sm-6" v-for="product in sortedLessons" :key="product.id">
+      <div class="card mb-3 mt-3 rounded border border-success-subtle">
+        <div class="card-header d-flex">
+          <div>
+            <h5>title: {{ product.title }}</h5>
+          </div>
+          <i :class="product.icon" class="fs-1 ms-auto"></i>
+        </div>
+        <div class="card-body">
+          <p>price: {{ product.price }} AED</p>
+          <p>Spaces: {{ product.spaces }}</p>
+          <p>location: {{ product.location }}</p>
+        </div>
+        <div class="card-footer">
+          <button
+            class="btn btn-info rounded"
+            v-on:click="addToCart(product)"
+            :disabled="product.spaces === 0"
+          >
+            Add to cart
+          </button>
+          <button
+            class="btn btn-danger rounded"
+            v-on:click="removeProduct(product)"
+          >
+            Remove
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 
-            <div class="container mt-4" ></div><br>
-                <div class="row g-3">
-                    <div class="col-sm-8 border rounded-3">
-                        <div v-for="item in cart" class="border-bottom" :key="item.lesson.id">
-                            <div class="col-sm-12 mb-4 p-3">
-                                <div class="row">
-                                    <div class="col-sm-4">
-                                        <i :class="item.lesson.icon" class="display-1 ms-auto"></i>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <p>Title: {{item.lesson.title}}</p>
-                                        <p>quantity: {{item.amount}}</p>
-                                        <button class="btn btn-danger rounded" v-on:click='removeProduct(item.lesson)'>Remove</button>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <p>price: {{item.lesson.price}}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>  
-            
+  <div class="container mt-4"></div>
+  <br />
+  <div class="row g-3">
+    <div class="col-sm-8 border rounded-3">
+      <div v-for="item in cart" class="border-bottom" :key="item.lesson.id">
+        <div class="col-sm-12 mb-4 p-3">
+          <div class="row">
+            <div class="col-sm-4">
+              <i :class="item.lesson.icon" class="display-1 ms-auto"></i>
+            </div>
+            <div class="col-sm-4">
+              <p>Title: {{ item.lesson.title }}</p>
+              <p>quantity: {{ item.amount }}</p>
+              <button
+                class="btn btn-danger rounded"
+                v-on:click="removeProduct(item.lesson)"
+              >
+                Remove
+              </button>
+            </div>
+            <div class="col-sm-4">
+              <p>price: {{ item.lesson.price }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 

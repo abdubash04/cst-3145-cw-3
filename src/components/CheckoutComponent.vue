@@ -25,7 +25,7 @@
 
 <script>
 export default {
-  name: "CheckoutPage",
+  name: "CheckoutComponent",
   props: {
     cart: {
       type: Array,
@@ -61,7 +61,7 @@ export default {
           username: this.name,
           phonenumber: this.phone,
         };
-        const response = await fetch('https://backend-ten-inky-80.vercel.app/collection/orders', {
+        const response = await fetch('https://cst-3145-cw-2.vercel.app/collection/orders/', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(order),
