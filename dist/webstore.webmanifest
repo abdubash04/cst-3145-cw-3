@@ -1,0 +1,21 @@
+
+{
+    "name": "A1 Lessons",
+    "description": "My After School Program Website",
+    "icons": [
+        {
+            "src": "img12.jpeg",
+            "sizes": "192x192",
+            "type": "img12.jpeg"
+        },
+        {
+            "src": "img13.jpeg",
+            "sizes": "512x512",
+            "type": "img13.jpeg"
+        }
+        
+    ],
+    "start_url": "index.html",
+    "display":"fullscreen",
+    "background_color": "#B12A34"
+}
