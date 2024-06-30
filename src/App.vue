@@ -4,9 +4,9 @@
       <h2>A1 Lessons</h2>
     </header>
     <main>
-      <ProductList @addProducts="addToCart" :serverUrl="serverUrl" v-if="activeComponent === 'ProductList'" />
+      <ProductList @add-to-cart="addToCart" @remove-from-cart="removeFromCart" v-if="activeComponent === 'ProductList'" />
       <CheckoutComponent :cart="cart" v-if="activeComponent === 'CheckoutComponent'" @remove-from-cart="removeFromCart" @clear-cart="clearCart"/>
-      <button v-on:click="changeComponent" class="btn btn-primary m-3">Proceed to Checkout ({{ cartItemCount }})</button>
+      <button v-if="activeComponent === 'ProductList'" v-on:click="changeComponent" class="btn btn-primary m-3">Proceed to Checkout ({{ cartItemCount }})</button>
     </main>
   </div>
 </template>
@@ -20,11 +20,9 @@ export default {
   components: {
     ProductList,
     CheckoutComponent
-    
   },
   data() {
     return {
-      serverUrl: "https://cst-3145-cw-2.vercel.app/collection/orders/",
       cart: JSON.parse(localStorage.getItem('cart')) || [],
       activeComponent: 'ProductList'
     };
@@ -65,6 +63,8 @@ export default {
       this.cart = [];
       localStorage.setItem('cart', JSON.stringify(this.cart));
     }
-  },
+  }
 };
 </script>
+
+

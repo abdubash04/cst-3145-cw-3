@@ -4,14 +4,15 @@
       <div class="card mb-3 mt-3 rounded border border-success-subtle">
         <div class="card-header d-flex">
           <div>
-            <h5>title: {{ product.title }}</h5>
+            <h5>Title: {{ product.title }}</h5>
           </div>
           <i :class="product.icon" class="fs-1 ms-auto"></i>
         </div>
         <div class="card-body">
-          <p>price: {{ product.price }} AED</p>
+          <i :class="lessons.icon"></i>
+          <p>Price: {{ product.price }} AED</p>
           <p>Spaces: {{ product.spaces }}</p>
-          <p>location: {{ product.location }}</p>
+          <p>Location: {{ product.location }}</p>
         </div>
         <div class="card-footer">
           <button
@@ -31,40 +32,9 @@
       </div>
     </div>
   </div>
-
-  <div class="container mt-4"></div>
-  <br />
-  <div class="row g-3">
-    <div class="col-sm-8 border rounded-3">
-      <div v-for="item in cart" class="border-bottom" :key="item.lesson.id">
-        <div class="col-sm-12 mb-4 p-3">
-          <div class="row">
-            <div class="col-sm-4">
-              <i :class="item.lesson.icon" class="display-1 ms-auto"></i>
-            </div>
-            <div class="col-sm-4">
-              <p>Title: {{ item.lesson.title }}</p>
-              <p>quantity: {{ item.amount }}</p>
-              <button
-                class="btn btn-danger rounded"
-                v-on:click="removeProduct(item.lesson)"
-              >
-                Remove
-              </button>
-            </div>
-            <div class="col-sm-4">
-              <p>price: {{ item.lesson.price }}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 </template>
 
-
-
- <script>
+<script>
 export default {
   name: "ProductList",
   data() {
@@ -73,11 +43,9 @@ export default {
       lessons: [],
       cart: JSON.parse(localStorage.getItem("cart")) || [],
       searchTerm: "",
-      username: "",
-      phonenumber: "",
       sortAttribute: "title",
       sortOrder: "asc",
-      sortedLessons: [],
+      sortedLessons: []
     };
   },
   created() {
@@ -86,9 +54,7 @@ export default {
   methods: {
     async getLessons() {
       try {
-        const response = await fetch(
-          "https://cst-3145-cw-2.vercel.app/collection/Products/"
-        );
+        const response = await fetch("https://cst-3145-cw-2.vercel.app/collection/Products/");
         this.lessons = await response.json();
         this.searchLessons();
       } catch (error) {
@@ -124,6 +90,8 @@ export default {
         } else {
           this.cart.push({ lesson, amount: 1 });
         }
+        localStorage.setItem('cart', JSON.stringify(this.cart));
+        this.$emit('add-to-cart', lesson);
       }
     },
     removeProduct(lesson) {
@@ -134,38 +102,17 @@ export default {
         if (this.cart[index].amount === 0) {
           this.cart.splice(index, 1);
         }
+        localStorage.setItem('cart', JSON.stringify(this.cart));
+        this.$emit('remove-from-cart', lesson);
       }
     },
     showCheckOut() {
       this.showProduct = !this.showProduct;
     },
-    async checkout() {
-      const order = {
-        lessons: this.cart,
-        username: this.username,
-        phonenumber: this.phonenumber,
-      };
-      try {
-        await fetch("https://cst-3145-cw-2.vercel.app/collection/orders/", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(order),
-        });
-        this.cart = [];
-        alert("Order successful");
-      } catch (error) {
-        console.error("Error during checkout:", error);
-      }
-    },
   },
   computed: {
     cartSize() {
       return this.cart.reduce((sum, item) => sum + item.amount, 0);
-    },
-    validateUserCredentials() {
-      return (
-        /^[a-zA-Z]+$/.test(this.username) && /^\d+$/.test(this.phonenumber)
-      );
     },
   },
 };
