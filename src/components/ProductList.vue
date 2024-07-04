@@ -1,4 +1,28 @@
+
 <template>
+<div class="d-flex align-items-end gap-3 flex-wrap">
+                    <div>
+                        <input type="text" class="form-control" v-model="searchTerm"
+                            placeholder="search for a lesson..." v-on:input="searchLessons">
+                    </div>
+
+                    <div>
+                        <label for="sortAttribute">Sort By:</label>
+                        <select v-model="sortAttribute" class="form-select" v-on:change="searchLessons">
+                            <option value="title">Title</option>
+                            <option value="location">Location</option>
+                            <option value="price">Price</option>
+                            <option value="spaces">Spaces</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="sortOrder">Sort Order:</label>
+                        <select v-model="sortOrder" class="form-select" v-on:change="searchLessons">
+                            <option value="asc">Ascending</option>
+                            <option value="desc">Descending</option>
+                        </select>
+                    </div>
+                </div>
   <div class="row">
     <div class="col-sm-6" v-for="product in sortedLessons" :key="product.id">
       <div class="card mb-3 mt-3 rounded border border-success-subtle">
@@ -84,14 +108,14 @@ export default {
     addToCart(lesson) {
       if (lesson.spaces > 0) {
         lesson.spaces--;
-        const cartItem = this.cart.find((item) => item.lesson.id === lesson.id);
+        const cartItem = this.cart.find((item) => item.lesson === lesson);
         if (cartItem) {
           cartItem.amount++;
         } else {
           this.cart.push({ lesson, amount: 1 });
         }
         localStorage.setItem('cart', JSON.stringify(this.cart));
-        this.$emit('add-to-cart', lesson);
+        this.$emit('update-cart', lesson);
       }
     },
     removeProduct(lesson) {

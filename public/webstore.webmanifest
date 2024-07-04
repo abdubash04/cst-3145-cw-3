@@ -6,12 +6,12 @@
         {
             "src": "img7.jpeg",
             "sizes": "192x192",
-            "type": "img7.jpeg"
+            "type": "image/png"
         },
         {
             "src": "img8.jpeg",
             "sizes": "512x512",
-            "type": "img8.jpeg"
+            "type": "image/png"
         }
         
     ],

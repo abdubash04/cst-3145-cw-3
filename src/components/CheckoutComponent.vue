@@ -1,12 +1,12 @@
 <template>
   <div class="container mt-4">
     <h1>Checkout Page</h1>
-    <div v-for="item in cartItems" :key="item._id" class="card mb-3">
+    <div v-for="item in cartItems" :key="item.lesson.id" class="card mb-3">
       <div class="card-body">
-        <p><strong>{{ item.title }}</strong> (Quantity: {{ item.quantity }})</p>
-        <p>Location: {{ item.location }}</p>
-        <p>Price: ${{ item.price }}</p>
-        <button @click="removeFromCart(item)" class="btn btn-danger">Remove</button>
+        <p><strong>{{ item.lesson.title }}</strong> (Quantity: {{ item.amount }})</p>
+        <p>Location: {{ item.lesson.location }}</p>
+        <p>Price: ${{ item.lesson.price }}</p>
+        <button @click="removeFromCart(item.lesson)" class="btn btn-danger">Remove</button>
       </div>
     </div>
     <div class="form-group">
@@ -41,6 +41,7 @@ export default {
   },
   computed: {
     cartItems() {
+      console.log('Cart items:', this.cart); // Debugging line
       return this.cart;
     },
     validForm() {
@@ -48,8 +49,9 @@ export default {
     }
   },
   methods: {
-    removeFromCart(item) {
-      this.$emit('remove-from-cart', item);
+    removeFromCart(lesson) {
+      console.log('Removing lesson:', lesson); // Debugging line
+      this.$emit('remove-from-cart', lesson);
     },
     async checkout() {
       if (!this.validForm) {
@@ -61,13 +63,15 @@ export default {
           username: this.name,
           phonenumber: this.phone,
         };
+        console.log('Placing order:', order); // Debugging line
         const response = await fetch('https://cst-3145-cw-2.vercel.app/collection/orders/', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(order),
         });
         if (!response.ok) {
-          throw new Error(`Error creating order: ${response.statusText}`);
+          const errorText = await response.text();
+          throw new Error(`Error creating order: ${response.statusText} - ${errorText}`);
         }
         this.checkoutMessage = `Order created successfully for ${this.name} (phone: ${this.phone})!`;
         this.$emit('clear-cart');

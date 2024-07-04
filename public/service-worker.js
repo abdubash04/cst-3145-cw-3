@@ -1,35 +1,47 @@
 
-var CacheName = 'Wsbstore';
-var CacheFiles = [
-    'index.html',
-    'favicon.ico',
-    'webstore.webmanifest',
-    'bootstrap.css',
-     'bootstrap.min.css'
-    
-];
+var cacheName = 'My Vue App';
+var cacheFiles = ["/images/top.png","/images/pro.png"];
 
-self.addEventListener('install', (e) => {
-    console.log('[Service Worker] Install');
-    e.waituntil(
-        caches.open(CacheName).then((cache) => {
-            console.log('[Service Worker] Caching all the Files');
-            return cache.addAll(CacheFiles);
+self.addEventListener("install", (e) => {
+    console.log("[ServiceWorker] - Install");
+    e.waitUntil(async () => {
+      const cache = await caches.open(cacheName);
+      console.log("[ServiceWorker] - Caching app files");
+      await cache.addAll(cacheFiles);
+    });
+  });
+  
+  // The activate handler takes care of cleaning up old caches.
+  self.addEventListener("activate", (e) => {
+    e.waitUntil(async () => {
+      const keyList = await caches.keys();
+      await Promise.all(
+        keyList.map((key) => {
+          if (key !== cacheName) {
+            console.log("[ServiceWorker] - Removing old cache", key);
+            return caches.delete(key);
+          }
         })
-    );
-});
-
-self.addEventListener('fetch', function (e) {
-    e.respondWith(
-        caches.match(e.request).then(function (r) {
-            //Download the file if is not in the cache,
-            return r || fetch(e.request).then(function (response){
-                //add the new file to cache
-                return caches.open(CacheName).then(function (cache) {
-                    cache.put(e.request, response.clone());
-                    return response;
-                });
+      );
+    });
+    e.waitUntil(self.clients.claim());
+  });
+  
+  self.addEventListener("fetch", (event) => { 
+    event.respondWith(
+      caches.match(event.request).then((cachedResponse) => {
+        if (cachedResponse) {
+          return cachedResponse;
+        }
+  
+        return caches.open(cacheName).then((cache) => {
+          return fetch(event.request).then((response) => {
+            // Put a copy of the response in the runtime cache.
+            return cache.put(event.request, response.clone()).then(() => {
+              return response;
             });
-        })
+          });
+        });
+      })
     );
-});
+  });
